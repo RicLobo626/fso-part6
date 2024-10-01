@@ -29,10 +29,14 @@ const notificationSlice = createSlice({
 
 const { show, hide, setTimerId } = notificationSlice.actions;
 
-export const showNotification = (message) => (dispatch) => {
-  dispatch(show(message));
-  const timeoutId = setTimeout(() => dispatch(hide()), 5000);
-  dispatch(setTimerId(timeoutId));
-};
+export const showNotification =
+  (message, timeSec = 5) =>
+  (dispatch) => {
+    const timeMs = timeSec * 1000;
+
+    dispatch(show(message));
+    const timeoutId = setTimeout(() => dispatch(hide()), timeMs);
+    dispatch(setTimerId(timeoutId));
+  };
 
 export default notificationSlice.reducer;
