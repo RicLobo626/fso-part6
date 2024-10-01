@@ -1,13 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createAnecdote, getAnecdotes } from "../services/anecdoteService";
+import {
+  createAnecdote,
+  getAnecdotes,
+  updateAnecdote,
+} from "../services/anecdoteService";
 
 const anecdoteSlice = createSlice({
   name: "anecdotes",
   initialState: [],
   reducers: {
-    voteAnecdote: (state, { payload: id }) => {
-      const anecdote = state.find((a) => a.id === id);
-      anecdote.votes++;
+    changeAnecdote: (state, { payload }) => {
+      const idx = state.findIndex(({ id }) => id === payload.id);
+      state[idx] = payload;
     },
     appendAnecdote: (state, { payload }) => {
       state.push(payload);
@@ -16,7 +20,8 @@ const anecdoteSlice = createSlice({
   },
 });
 
-export const { voteAnecdote, appendAnecdote, setAnecdotes } = anecdoteSlice.actions;
+export const { changeAnecdote, appendAnecdote, setAnecdotes } =
+  anecdoteSlice.actions;
 
 export const initAnecdotes = () => async (dispatch) => {
   const anecdotes = await getAnecdotes();
@@ -26,6 +31,17 @@ export const initAnecdotes = () => async (dispatch) => {
 export const createAndAppendAnecdote = (body) => async (dispatch) => {
   const anecdote = await createAnecdote(body);
   dispatch(appendAnecdote(anecdote));
+};
+
+export const voteAndUpdateAnecdote = ({ id, ...anecdote }) => {
+  return async (dispatch) => {
+    const updatedAnecdote = await updateAnecdote(id, {
+      ...anecdote,
+      votes: anecdote.votes + 1,
+    });
+
+    dispatch(changeAnecdote(updatedAnecdote));
+  };
 };
 
 export default anecdoteSlice.reducer;
