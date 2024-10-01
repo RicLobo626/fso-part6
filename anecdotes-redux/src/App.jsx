@@ -2,8 +2,7 @@ import AnecdoteForm from "./components/AnecdoteForm";
 import AnecdoteList from "./components/AnecdoteList";
 import Notification from "./components/Notification";
 import Filter from "./components/Filter";
-import { getAnecdotes } from "./services/anecdoteService";
-import { setAnecdotes } from "./reducers/anecdoteReducer";
+import { initAnecdotes } from "./reducers/anecdoteReducer";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
@@ -11,13 +10,8 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const getAndSetAnecdotes = async () => {
-      const anecdotes = await getAnecdotes();
-      dispatch(setAnecdotes(anecdotes));
-    };
-
-    getAndSetAnecdotes();
-  });
+    dispatch(initAnecdotes());
+  }, []);
 
   return (
     <main>
