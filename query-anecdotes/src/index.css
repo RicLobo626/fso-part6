@@ -1,0 +1,20 @@
+.notification {
+  display: flex;
+  border-style: solid;
+  border-width: 2px;
+  padding: 10px;
+}
+
+.notification--error {
+  background-color: rgb(230, 174, 170);
+  border-color: rgb(170, 18, 18);
+}
+
+.notification--success {
+  background-color: rgb(181, 224, 177);
+  border-color: green;
+}
+
+.notification .close-btn {
+  margin-left: auto;
+}
