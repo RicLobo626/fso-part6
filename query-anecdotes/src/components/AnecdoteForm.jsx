@@ -1,17 +1,28 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createAnecdote } from "../services/anecdotesService";
 import { useRef } from "react";
+import { useNotification } from "../context/NotificationContext";
 
 const AnecdoteForm = () => {
   const formRef = useRef();
   const queryClient = useQueryClient();
+  const { showSuccess, showError } = useNotification();
+
+  const handleSuccess = () => {
+    showSuccess("Anecdote created successfully");
+    queryClient.invalidateQueries({ queryKey: ["anecdotes"] });
+    formRef.current.reset();
+  };
+
+  const handleError = (e) => {
+    const errorPayload = e.response.data;
+    showError(errorPayload.error);
+  };
 
   const createMutation = useMutation({
     mutationFn: createAnecdote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["anecdotes"] });
-      formRef.current.reset();
-    },
+    onSuccess: handleSuccess,
+    onError: handleError,
   });
 
   const handleCreate = (e) => {
