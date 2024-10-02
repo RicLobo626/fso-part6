@@ -1,18 +1,19 @@
+import { useNotification } from "../context/NotificationContextProvider";
+
 const Notification = () => {
-  const style = {
-    border: 'solid',
-    padding: 10,
-    borderWidth: 1,
-    marginBottom: 5
-  }
-  
-  if (true) return null
+  const { notification, removeNotification } = useNotification();
+
+  if (!notification) return null;
 
   return (
-    <div style={style}>
-      
-    </div>
-  )
-}
+    <div className={`notification notification--${notification.style}`}>
+      {notification.message}
 
-export default Notification
+      <button onClick={removeNotification} className="close-btn">
+        Close
+      </button>
+    </div>
+  );
+};
+
+export default Notification;
